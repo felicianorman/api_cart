@@ -1,0 +1,69 @@
+type Project {
+	id: ID
+	name: String
+	description: String
+	# ticket: [Ticket]
+}
+
+type DeletedResourceResponse {
+	deletedId: ID
+	success: Boolean
+}
+
+type Ticket {
+	id: ID
+	title: String
+	description: String
+	type: TicketType
+	priority: TicketPriority
+	status: TicketStatus
+	# projectId: String
+}
+
+enum TicketStatus {
+	NEW
+	IN_DEVELOPMENT
+	IN_REVIEW
+	READY_FOR_TEST
+	COMPLETED
+}
+
+enum TicketType {
+	BUG
+	NEW_FEATURE
+	OTHER
+}
+
+enum TicketPriority {
+	CRITICAL
+	HIGH
+	MEDIUM
+	LOW
+}
+
+input CreateProjectInputs {
+	name: String!
+	description: String
+}
+
+#Läser data
+type Query {
+	getProjectById(projectId: ID!): Project
+	getAllProjects: [Project]
+}
+
+#Ändrar data. (CRUD)
+type Mutation {
+	createProject(input: CreateProjectInputs): Project
+	updateProject(id: ID!, name: String!, description: String!): Project
+	deleteProject(projectId: ID!): DeletedResourceResponse
+	createTicket(input: CreateTicketInput): Ticket
+}
+
+input CreateTicketInput {
+	title: String!
+	description: String
+	type: TicketType!
+	priority: TicketPriority
+	projectId: ID!
+}
