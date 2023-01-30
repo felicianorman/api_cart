@@ -6,3 +6,7 @@ type Cart {
 type Query {
   getCartById(cartId: ID!): Cart
 }
+
+type Mutation {
+  createCart: Cart
+}
