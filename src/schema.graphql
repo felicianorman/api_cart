@@ -4,6 +4,11 @@ type Cart {
   products: [Product]
 }
 
+type DeletedResourceResponse {
+  deletedId: ID
+  success: Boolean
+}
+
 type Product {
   productId: ID
   name: String
@@ -16,6 +21,7 @@ type Query {
 
 type Mutation {
   createCart: Cart
+  deleteCart(cartId: ID!): DeletedResourceResponse 
   createProduct(input: CreateProductInput): Product 
 }
 

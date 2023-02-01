@@ -95,5 +95,20 @@ exports.resolvers = {
         return newProduct;
       }
     },
+    deleteCart: async (_, args) => {
+      const cartId = args.cartId; 
+
+      let filePath = path.join(__dirname, `../data/projects/carts/${cartId}.json`)
+
+      const cartExists = await fileExists(filePath)
+      if(!cartExists) return new GraphQLError('That cart does not exist!')
+
+      await fsPromises.unlink(filePath)
+
+      return {
+        deletedId: cartId,
+        success: true
+      }
+    }
   },
 };
