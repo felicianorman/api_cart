@@ -1,6 +1,13 @@
 type Cart {
   id: ID
   totalAmount: String
+  products: [Product]
+}
+
+type Product {
+  productId: ID
+  name: String
+  price: Int
 }
 
 type Query {
@@ -9,4 +16,10 @@ type Query {
 
 type Mutation {
   createCart: Cart
+  createProduct(input: CreateProductInput): Product 
+}
+
+input CreateProductInput {
+  name: String!
+  price: Int!
 }

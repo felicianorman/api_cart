@@ -39,7 +39,7 @@ async function run() {
 
 		//lyssna på port 5000. (localhost:5000/)
 		app.listen(port, () => {
-			console.log(`🚀 Server ready at http://localhost:${port}/`)
+			console.log(`🚀 Server ready at http://localhost:${port}/graphql`)
 		})
 	} catch (error) {
 		console.error(error)
