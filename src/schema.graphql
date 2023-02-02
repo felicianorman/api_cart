@@ -1,6 +1,6 @@
 type Cart {
   id: ID
-  totalAmount: String
+  totalAmount: Int
   products: [Product]
 }
 
@@ -11,7 +11,7 @@ type DeletedResourceResponse {
 
 type Product {
   productId: ID
-  name: String
+  productName: String
   price: Int
 }
 
@@ -21,8 +21,9 @@ type Query {
 
 type Mutation {
   createCart: Cart
-  deleteCart(cartId: ID!): DeletedResourceResponse 
-  createProduct(input: CreateProductInput): Product 
+  deleteCart(cartId: ID!): DeletedResourceResponse
+  createProduct(input: CreateProductInput): Product
+  addToCart(cartId: ID!, productId: ID!): Cart
 }
 
 input CreateProductInput {
