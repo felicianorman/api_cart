@@ -152,13 +152,18 @@ exports.resolvers = {
 
       const productToCart = JSON.parse(newProduct);
 
+      if (shoppingCart.products == undefined) {
+        shoppingCart.products = [];
+        shoppingCart.products.push(productToCart);
+      } else {
+        shoppingCart.products.push(productToCart);
+      }
+
       let products = shoppingCart.products;
 
-      shoppingCart.products = [];
+      let totalAmount = shoppingCart.totalAmount;
 
-      shoppingCart.products.push(productToCart);
-
-      let totalAmount = 0;
+      totalAmount = 0;
 
       for (let i = 0; i < shoppingCart.products.length; i++) {
         totalAmount += shoppingCart.products[i].price;
@@ -169,6 +174,59 @@ exports.resolvers = {
       await fsPromises.writeFile(cartPath, JSON.stringify(updatedCart));
 
       return updatedCart;
+    },
+    deleteFromCart: async (_, args) => {
+      const { cartId, productId } = args;
+
+      //hittar i directionary
+      const cartPath = path.join(
+        __dirname,
+        `../data/projects/carts/${cartId}.json`
+      );
+      const productPath = path.join(
+        __dirname,
+        `../data/projects/products/${productId}.json`
+      );
+
+      //if sats
+      const cartExists = await fileExists(cartPath);
+      if (!cartExists) return new GraphQLError("That cart does not exist!");
+
+      const productExists = await fileExists(productPath);
+      if (!productExists)
+        return new GraphQLError("That product does not exist!");
+
+      //läs
+      const cartFile = await fsPromises.readFile(cartPath, {
+        encoding: "utf-8",
+      });
+
+      const productFile = await fsPromises.readFile(productPath, {
+        encoding: "utf-8",
+      });
+
+      //gör till JS objekt
+     
+      let shoppginCart = JSON.parse(cartFile);
+      let products = shoppginCart.products;
+      let totalAmount = 0;
+
+      //tar bort produkten på position [i]
+      for (let i = 0; i < shoppginCart.products.length; i++) {
+        if(shoppginCart.products[i].productId === productId) {
+          shoppginCart.products.splice(i, 1);
+          shoppginCart.totalAmount = totalAmount;
+          console.log(shoppginCart.products);
+        }
+      }
+
+
+      const updatedCart = { cartId, totalAmount, products };
+
+      await fsPromises.writeFile(cartPath, JSON.stringify(updatedCart));
+
+      return updatedCart;
+
     },
   },
 };
