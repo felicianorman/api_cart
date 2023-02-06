@@ -60,11 +60,11 @@ exports.resolvers = {
       }
     },
     createProduct: async (_, args) => {
-      const { name, price } = args.input;
+      const { productName, price } = args.input;
 
       const newProduct = {
         productId: crypto.randomUUID(),
-        name,
+        productName,
         price,
       };
 
@@ -206,27 +206,31 @@ exports.resolvers = {
       });
 
       //gör till JS objekt
-     
+
       let shoppginCart = JSON.parse(cartFile);
       let products = shoppginCart.products;
-      let totalAmount = 0;
+      let totalAmount = shoppginCart.totalAmount;
 
       //tar bort produkten på position [i]
       for (let i = 0; i < shoppginCart.products.length; i++) {
-        if(shoppginCart.products[i].productId === productId) {
+        if (shoppginCart.products[i].productId === productId) {
+          console.log(shoppginCart.products.price);
           shoppginCart.products.splice(i, 1);
-          shoppginCart.totalAmount = totalAmount;
-          console.log(shoppginCart.products);
         }
       }
 
+      for (let index = 0; index < products.length; index++) {
+        console.log(products[index].price);
+        totalAmount = totalAmount - products[index].price;
+        
+      }
+      let id = cartId;
 
-      const updatedCart = { cartId, totalAmount, products };
+      const updatedCart = { id, totalAmount, products };
 
       await fsPromises.writeFile(cartPath, JSON.stringify(updatedCart));
 
       return updatedCart;
-
     },
   },
 };

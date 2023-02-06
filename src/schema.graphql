@@ -28,6 +28,6 @@ type Mutation {
 }
 
 input CreateProductInput {
-  name: String!
+  productName: String!
   price: Int!
 }
